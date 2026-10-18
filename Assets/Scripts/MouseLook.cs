@@ -21,7 +21,7 @@ public class MouseLook : MonoBehaviour
 
         // Rotação vertical (olhar para cima e para baixo) restrita aos limites que você pediu
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -30f, 45f);
+        xRotation = Mathf.Clamp(xRotation, -30f, 25f);
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
         // Rotação horizontal (olhar para os lados) girando o corpo do Player diretamente no eixo Y
