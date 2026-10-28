@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PedraFlutuante : MonoBehaviour
+public class Pebbles : MonoBehaviour
 {
     public float velocidade = 1.5f; // Velocidade da oscilação
     public float altura = 0.15f;     // Distância que sobe e desce
