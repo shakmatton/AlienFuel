@@ -696,7 +696,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -872,7 +872,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1490,7 +1490,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 59
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1675,7 +1675,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1768,11 +1768,10 @@ MonoBehaviour:
     WASD: move player
 
 
-    E: grab/release item
+    Right click: grab/release item
 
 
-    Esc:
-    return to main menu'
+    Esc: return to main menu'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ecf5799d674b61e4e91f1018367e616a, type: 2}
   m_sharedMaterial: {fileID: -3749737372188545257, guid: ecf5799d674b61e4e91f1018367e616a, type: 2}
@@ -1822,7 +1821,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1959,7 +1958,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -2046,23 +2045,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "No in\xEDcio do s\xE9culo 31, a humanidade j\xE1 domina a tecnologia necess\xE1ria
-    para cobrir dist\xE2ncias interestelares. \n\nNo ano 3026, voc\xEA trabalha como
-    entregador da Uber Hauler Intergalactics, encarregado de percorrer uma rota de
-    um setor localizado entre a Grande e a Pequena Nuvem de Magalh\xE3es. \n\nDurante
-    o trajeto, voc\xEA sofre uma emboscada violenta de piratas espaciais. Os saqueadores
-    roubam sua carga e estouram seus tanques principais de combust\xEDvel, deixando
-    sua nave descontrolada. \n\nNo meio do p\xE2nico, a IA de bordo informa sobre
-    a exist\xEAncia de antigos orbs de energia capazes de reativar os motores e o
-    suporte \xE0 vida, permitindo alcan\xE7ar o posto mais pr\xF3ximo. \n\nO problema:
-    essa energia est\xE1 em um pequeno planeta desconhecido, totalmente afastado
-    da sua rota original. \n\nSem muita escolha, a rota \xE9 reajustada para o tal
-    planeta desconhecido. Mas, pouco antes de chegar l\xE1, os sistemas da aeronave
-    entram em falha cr\xEDtica. O pouso for\xE7ado \xE9 inevit\xE1vel. \n\nA espa\xE7onave
-    descontrolada atinge o solo, mas resiste ao impacto. Ela agora encontra-se encravada
-    no ch\xE3o, totalmente offline e n\xE3o operacional. \n\nSua miss\xE3o: explorar
-    esse ambiente hostil e coletar os orbs necess\xE1rios para reabastecer a nave
-    e conseguir escapar do planeta."
+  m_text: "No in\xEDcio do s\xE9culo 31, a humanidade j\xE1 domina a tecnologia necess\xE1ria para cobrir dist\xE2ncias interestelares. \n\nNo ano 3026, voc\xEA trabalha como entregador da Uber Hauler Intergalactics, encarregado de percorrer uma rota de um setor localizado entre a Grande e a Pequena Nuvem de Magalh\xE3es. \n\nDurante o trajeto, voc\xEA sofre uma emboscada violenta de piratas espaciais. Os saqueadores roubam sua carga e estouram seus tanques principais de combust\xEDvel, deixando sua nave descontrolada. \n\nNo meio do p\xE2nico, a IA de bordo informa sobre a exist\xEAncia de antigos orbs de energia capazes de reativar os motores e o suporte \xE0 vida, permitindo alcan\xE7ar o posto mais pr\xF3ximo. \n\nO problema: essa energia est\xE1 em um pequeno planeta desconhecido, totalmente afastado da sua rota original. \n\nSem muita escolha, a rota \xE9 reajustada para o tal planeta desconhecido. Mas, pouco antes de chegar l\xE1, os sistemas da aeronave entram em falha cr\xEDtica. O pouso for\xE7ado \xE9 inevit\xE1vel. \n\nA espa\xE7onave descontrolada atinge o solo, mas resiste ao impacto. Ela agora encontra-se encravada no ch\xE3o, totalmente offline e n\xE3o operacional. \n\nSua miss\xE3o: explorar esse ambiente hostil e coletar os orbs necess\xE1rios para reabastecer a nave e conseguir escapar do planeta."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ecf5799d674b61e4e91f1018367e616a, type: 2}
   m_sharedMaterial: {fileID: -3749737372188545257, guid: ecf5799d674b61e4e91f1018367e616a, type: 2}
@@ -2112,7 +2095,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -2406,7 +2389,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -2543,7 +2526,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -2863,7 +2846,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -3000,7 +2983,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -3129,7 +3112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.27058825}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
