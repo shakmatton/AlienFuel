@@ -14,9 +14,6 @@ public class Orb : MonoBehaviour
     [Header("Identidade do orb")]
     [SerializeField] private TipoCorOrb corDoOrb;
 
-    [Header("Animação")]
-    [SerializeField] private Pebbles animacaoFlutuacao;
-
     [Header("Efeito visual")]
     [SerializeField] private GameObject efeitoAtmosfericoGigante;
 
@@ -35,9 +32,12 @@ public class Orb : MonoBehaviour
     private EstadoOrb estado = EstadoOrb.NoCenario;
 
     private Collider[] orbColliders;
-    private Rigidbody orbRigidbody;
 
+    private OrbAnimation animacaoVisual;
+
+    private Transform pontoDeApoio;
     private Transform destino;
+
     private Action<Orb> aoChegar;
 
     public TipoCorOrb Cor => corDoOrb;
@@ -47,25 +47,20 @@ public class Orb : MonoBehaviour
 
     private void Awake()
     {
-        orbColliders = GetComponentsInChildren<Collider>();
-        orbRigidbody = GetComponent<Rigidbody>();
+        // Obtém a animação que está no objeto visual filho.
+        animacaoVisual = GetComponentInChildren<OrbAnimation>(true);
 
-        if (orbRigidbody != null)
-        {
-            orbRigidbody.isKinematic = true;
-            orbRigidbody.useGravity = false;
-        }
+        orbColliders = GetComponentsInChildren<Collider>(true);
 
-        // O efeito gigante começa desativado.
         if (efeitoAtmosfericoGigante != null)
         {
             efeitoAtmosfericoGigante.SetActive(false);
         }
 
-        if (animacaoFlutuacao == null)
+        if (animacaoVisual == null)
         {
             Debug.LogWarning(
-                $"{name}: associe o componente Pebbles no Inspector.",
+                $"{name}: nenhum OrbAnimation foi encontrado nos filhos.",
                 this
             );
         }
@@ -73,30 +68,32 @@ public class Orb : MonoBehaviour
 
 
     // Chamado quando o jogador pega o orb.
-    public bool Pegar(Transform pontoDeApoio)
+    public bool Pegar(Transform novoPontoDeApoio)
     {
-        if (!PodeSerPego || pontoDeApoio == null)
+        if (!PodeSerPego || novoPontoDeApoio == null)
             return false;
-
-        // Interrompe somente a flutuação deste orb.
-        if (animacaoFlutuacao != null)
-        {
-            animacaoFlutuacao.enabled = false;
-        }
 
         estado = EstadoOrb.Segurado;
 
-        // Impede colisões durante o transporte.
+        pontoDeApoio = novoPontoDeApoio;
+
+        // Interrompe somente a flutuação.
+        // A rotação continua ativa.
+        if (animacaoVisual != null)
+        {
+            animacaoVisual.DefinirFlutuacao(false);
+        }
+
         AtivarColisores(false);
 
-        // Preserva o tamanho original ao trocar de pai.
+        // Torna o orb filho do HoldPoint,
+        // preservando escala e transformação mundial.
         transform.SetParent(pontoDeApoio, true);
 
-        // Posiciona o orb diante da câmera.
+        // Posiciona diante da câmera.
         transform.position = pontoDeApoio.position;
-        transform.rotation = pontoDeApoio.rotation;
 
-        // Ativa o efeito visual gigante, caso esteja configurado.
+        // Ativa o efeito atmosférico.
         if (efeitoAtmosfericoGigante != null)
         {
             efeitoAtmosfericoGigante.SetActive(true);
@@ -119,13 +116,31 @@ public class Orb : MonoBehaviour
 
         estado = EstadoOrb.EmTransito;
 
-        // Desprende o orb da câmera, preservando sua escala.
+        // Remove o orb da hierarquia da câmera,
+        // preservando sua transformação mundial.
         transform.SetParent(null, true);
+
+        pontoDeApoio = null;
 
         destino = pontoDeInsercao;
         aoChegar = aoChegarAoDestino;
 
+        Debug.Log(
+            $"[Orb] {name}: iniciou transporte em direção a {destino.name}."
+        );
+
         return true;
+    }
+
+
+    private void LateUpdate()
+    {
+        // Mantém o orb diante da câmera enquanto estiver segurado.
+        if (estado == EstadoOrb.Segurado &&
+            pontoDeApoio != null)
+        {
+            transform.position = pontoDeApoio.position;
+        }
     }
 
 
@@ -144,13 +159,14 @@ public class Orb : MonoBehaviour
             return;
         }
 
-        // Deslocamento suave até a entrada da nave.
+        // Movimento suave em direção à nave.
         transform.position = Vector3.MoveTowards(
             transform.position,
             destino.position,
             velocidadeAteNave * Time.deltaTime
         );
 
+        // Verifica se o orb chegou ao destino.
         float distanciaQuadrada =
             (transform.position - destino.position).sqrMagnitude;
 
@@ -161,7 +177,13 @@ public class Orb : MonoBehaviour
 
             estado = EstadoOrb.Entregue;
 
-            // Desativa o efeito gigante quando o orb chega à nave.
+            // Interrompe as animações do orb.
+            if (animacaoVisual != null)
+            {
+                animacaoVisual.PararAnimacoes();
+            }
+
+            // Desativa o efeito atmosférico gigante.
             if (efeitoAtmosfericoGigante != null)
             {
                 efeitoAtmosfericoGigante.SetActive(false);
@@ -169,6 +191,8 @@ public class Orb : MonoBehaviour
 
             Action<Orb> callback = aoChegar;
             aoChegar = null;
+
+            Debug.Log($"[Orb] {name}: chegou ao destino!");
 
             callback?.Invoke(this);
         }
