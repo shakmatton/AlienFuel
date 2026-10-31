@@ -20,6 +20,9 @@ public class PlayerOrbInteraction : MonoBehaviour
 
     [Header("Interação")]
     [SerializeField] private float distanciaParaPegar = 3f;
+    
+    [Header("Nave")]
+    [SerializeField] private ShipRecoveryController recuperacaoNave;
 
     private Orb orbSegurado;
 
@@ -218,9 +221,18 @@ public class PlayerOrbInteraction : MonoBehaviour
 
     private void AoChegarAoDestino(Orb orb)
     {
-        Debug.Log(
-            "Orb chegou à entrada da nave: " + orb.name
-        );
+        Debug.Log("Orb chegou à entrada da nave: " + orb.name);
+
+        if (recuperacaoNave != null)
+        {
+            recuperacaoNave.RegistrarOrbEntregue(orb);
+        }
+        else
+        {
+            Debug.LogError(
+                "PlayerOrbInteraction: ShipRecoveryController não foi configurado."
+            );
+        }
     }
     
     private void LateUpdate()
