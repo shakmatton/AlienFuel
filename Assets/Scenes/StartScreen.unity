@@ -1093,7 +1093,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Alien Fuel - Jogo desenvolvido para a disciplina de Computa\xE7\xE3o Gr\xE1fica (2026.2).\n\nAutor: Iuri F. Cordeiro\nProf.\xAA: Fabiana Frata\n\nLojas de assets: Unity Asset Store | Sketchfab | OpenGameArt Music\n\nM\xFAsicas: Deep Space 10 (OpenGameArt Music)"
+  m_text: "Alien Fuel - Jogo desenvolvido para a disciplina de Computa\xE7\xE3o Gr\xE1fica (2026.2).\n\nAutor: Iuri F. Cordeiro\nProf.\xAA: Fabiana Frata\n\nAssets: Unity Asset Store | Sketchfab | OpenGameArt Music\n\nM\xFAsicas: Deep Space 10 (OpenGameArt Music)\nEfeitos sonoros: ChatGPT"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ecf5799d674b61e4e91f1018367e616a, type: 2}
   m_sharedMaterial: {fileID: -3749737372188545257, guid: ecf5799d674b61e4e91f1018367e616a, type: 2}

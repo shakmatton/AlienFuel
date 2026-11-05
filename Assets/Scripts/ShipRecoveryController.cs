@@ -1,4 +1,4 @@
-
+using UnityEngine.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,16 +14,35 @@ public class ShipRecoveryController : MonoBehaviour
     private int orbsEntregues = 0;
 
     private readonly HashSet<EntityId> orbsRegistrados = new();
-    
+
     private float tempoInicioHover;
 
     [SerializeField] private float duracaoEntradaFlutuacao = 1f;
 
-    [Header("Audio")]
+
+    [Header("Audio - Efeitos das entregas")]
     [SerializeField] private AudioSource audioNave;
-    [SerializeField] private AudioClip somPrimeiroOrb;
-    [SerializeField] private AudioClip somSegundoOrb;
-    [SerializeField] private AudioClip somTerceiroOrb;
+    
+    [Header("Audio - Tentativas de partida do motor")]
+    
+    [FormerlySerializedAs("somPrimeiroOrb")]
+    [SerializeField] private AudioClip somMotorTentativa1;
+
+    [FormerlySerializedAs("somSegundoOrb")]
+    [SerializeField] private AudioClip somMotorTentativa2;
+
+    [FormerlySerializedAs("somTerceiroOrb")]
+    [SerializeField] private AudioClip somMotorTentativa3;
+    
+    
+
+    [Header("Audio - Ativacao da flutuacao")]
+    [SerializeField] private AudioClip somAtivacaoFlutuacao;
+
+    [Header("Audio - Ambiencia da flutuacao")]
+    [SerializeField] private AudioSource audioAmbienciaHover;
+    [SerializeField] private AudioClip somAmbienciaFlutuacao;
+
 
     [Header("Vibracao - Primeiro orb")]
     [SerializeField] private float duracaoPrimeiraVibracao = 1.5f;
@@ -50,9 +69,10 @@ public class ShipRecoveryController : MonoBehaviour
     [Header("Flutuacao final")]
     [SerializeField] private float alturaFlutuacao = 0.04f;
     [SerializeField] private float velocidadeFlutuacao = 1.3f;
-    
+
     [Header("Encerramento")]
     [SerializeField] private EndingPanelController endingPanelController;
+
 
     private int etapasProcessadas = 0;
     private bool processandoEtapas = false;
@@ -83,7 +103,7 @@ public class ShipRecoveryController : MonoBehaviour
     }
 
 
-    // Recebe a notificação de cada orb inserido na nave.
+    // Recebe a notificacao de cada orb inserido na nave.
     public void RegistrarOrbEntregue(Orb orb)
     {
         if (orb == null || orbsEntregues >= orbsNecessarios)
@@ -122,7 +142,7 @@ public class ShipRecoveryController : MonoBehaviour
                 // PRIMEIRO ORB
                 case 1:
 
-                    ReproduzirSom(somPrimeiroOrb);
+                    ReproduzirSom(somMotorTentativa1);
 
                     yield return TremerNave(
                         duracaoPrimeiraVibracao,
@@ -136,7 +156,7 @@ public class ShipRecoveryController : MonoBehaviour
                 // SEGUNDO ORB
                 case 2:
 
-                    ReproduzirSom(somSegundoOrb);
+                    ReproduzirSom(somMotorTentativa2);
 
                     yield return TremerNave(
                         duracaoSegundaVibracao,
@@ -150,31 +170,37 @@ public class ShipRecoveryController : MonoBehaviour
                 // TERCEIRO ORB
                 case 3:
 
-                    ReproduzirSom(somTerceiroOrb);
+                    ReproduzirSom(somMotorTentativa3);
 
-                    // Última vibração antes da decolagem.
+                    // Ultima vibracao antes da decolagem.
                     yield return TremerNave(
                         duracaoTerceiraVibracao,
                         intensidadeTerceiraVibracao,
                         rotacaoTerceiraVibracao
                     );
 
-                    // Decolagem da única nave existente.
+                    // Decolagem da unica nave existente.
                     yield return Decolar();
 
                     // Registra exatamente onde a nave terminou a decolagem.
                     posicaoHover = naveAnimada.position;
 
-                    // Inicia a contagem da flutuação.
+                    // Inicia a contagem da flutuacao.
                     tempoInicioHover = Time.time;
 
-                    // Ativa a animação de flutuação.
+                    // Ativa a animacao de flutuacao.
                     naveEmHover = true;
+
+                    // Som de ativacao dos motores antigravitacionais.
+                    ReproduzirSom(somAtivacaoFlutuacao);
+
+                    // Inicia a ambiencia continua dos motores.
+                    IniciarAmbienciaFlutuacao();
 
                     Debug.Log(
                         "Nave recuperada e operacional!"
                     );
-                    
+
                     // Inicia a contagem para o painel final.
                     endingPanelController.IniciarEncerramento();
 
@@ -186,7 +212,7 @@ public class ShipRecoveryController : MonoBehaviour
     }
 
 
-    // Produz uma vibração mecânica temporária na nave.
+    // Produz uma vibracao mecanica temporaria na nave.
     private IEnumerator TremerNave(
         float duracao,
         float amplitudePosicional,
@@ -201,7 +227,7 @@ public class ShipRecoveryController : MonoBehaviour
         {
             float progresso = tempo / duracao;
 
-            // Faz a vibração começar e terminar suavemente.
+            // Faz a vibracao comecar e terminar suavemente.
             float envelope = Mathf.Sin(progresso * Mathf.PI);
 
             float fase = tempo * frequenciaVibracao * Mathf.PI * 2f;
@@ -228,7 +254,7 @@ public class ShipRecoveryController : MonoBehaviour
             yield return null;
         }
 
-        // Restaura exatamente a posição e a rotação anteriores.
+        // Restaura exatamente a posicao e a rotacao anteriores.
         naveAnimada.SetPositionAndRotation(
             posicaoOriginal,
             rotacaoOriginal
@@ -236,7 +262,7 @@ public class ShipRecoveryController : MonoBehaviour
     }
 
 
-    // Faz a nave subir e corrigir sua orientação.
+    // Faz a nave subir e corrigir sua orientacao.
     private IEnumerator Decolar()
     {
         Vector3 posicaoInicial = naveAnimada.position;
@@ -288,6 +314,7 @@ public class ShipRecoveryController : MonoBehaviour
     }
 
 
+    // Reproduz efeitos sonoros pontuais.
     private void ReproduzirSom(AudioClip som)
     {
         if (audioNave != null && som != null)
@@ -297,17 +324,32 @@ public class ShipRecoveryController : MonoBehaviour
     }
 
 
-    // Mantém uma pequena flutuação após a recuperação completa.
-    
+    // Inicia o som continuo dos motores durante a flutuacao.
+    private void IniciarAmbienciaFlutuacao()
+    {
+        if (audioAmbienciaHover == null || somAmbienciaFlutuacao == null)
+            return;
+
+        audioAmbienciaHover.clip = somAmbienciaFlutuacao;
+        audioAmbienciaHover.loop = true;
+
+        if (!audioAmbienciaHover.isPlaying)
+        {
+            audioAmbienciaHover.Play();
+        }
+    }
+
+
+    // Mantem uma pequena flutuacao apos a recuperacao completa.
     private void Update()
     {
         if (!naveEmHover || naveAnimada == null)
             return;
 
-        // Tempo transcorrido desde o início da flutuação.
+        // Tempo transcorrido desde o inicio da flutuacao.
         float tempoDecorrido = Time.time - tempoInicioHover;
 
-        // Aumenta gradualmente a intensidade da flutuação.
+        // Aumenta gradualmente a intensidade da flutuacao.
         float progressoEntrada = Mathf.Clamp01(
             tempoDecorrido / duracaoEntradaFlutuacao
         );
@@ -324,9 +366,8 @@ public class ShipRecoveryController : MonoBehaviour
             * alturaFlutuacao
             * intensidade;
 
-        // Atualiza a posição da nave.
+        // Atualiza a posicao da nave.
         naveAnimada.position = posicaoHover +
                                Vector3.up * deslocamentoY;
     }
-
 }

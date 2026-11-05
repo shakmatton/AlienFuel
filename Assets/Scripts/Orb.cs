@@ -21,6 +21,15 @@ public class Orb : MonoBehaviour
     [SerializeField] private float velocidadeAteNave = 1.5f;
     [SerializeField] private float distanciaDeChegada = 0.05f;
 
+    [Header("Audio - Coleta")]
+    [SerializeField] private AudioSource audioColeta;
+    [SerializeField] private AudioClip somColeta;
+
+    [Header("Audio - Orb segurado")]
+    [SerializeField] private AudioSource audioOrbSegurado;
+    [SerializeField] private AudioClip somOrbSegurado;
+
+
     private enum EstadoOrb
     {
         NoCenario,
@@ -47,7 +56,7 @@ public class Orb : MonoBehaviour
 
     private void Awake()
     {
-        // Obtém a animação que está no objeto visual filho.
+        // Obtem a animacao que esta no objeto visual filho.
         animacaoVisual = GetComponentInChildren<OrbAnimation>(true);
 
         orbColliders = GetComponentsInChildren<Collider>(true);
@@ -77,8 +86,22 @@ public class Orb : MonoBehaviour
 
         pontoDeApoio = novoPontoDeApoio;
 
-        // Interrompe somente a flutuação.
-        // A rotação continua ativa.
+        // Reproduz o som de coleta uma unica vez.
+        if (audioColeta != null && somColeta != null)
+        {
+            audioColeta.PlayOneShot(somColeta);
+        }
+
+        // Inicia o zumbido continuo enquanto o orb estiver segurado.
+        if (audioOrbSegurado != null && somOrbSegurado != null)
+        {
+            audioOrbSegurado.clip = somOrbSegurado;
+            audioOrbSegurado.loop = true;
+            audioOrbSegurado.Play();
+        }
+
+        // Interrompe somente a flutuacao.
+        // A rotacao continua ativa.
         if (animacaoVisual != null)
         {
             animacaoVisual.DefinirFlutuacao(false);
@@ -87,13 +110,13 @@ public class Orb : MonoBehaviour
         AtivarColisores(false);
 
         // Torna o orb filho do HoldPoint,
-        // preservando escala e transformação mundial.
+        // preservando escala e transformacao mundial.
         transform.SetParent(pontoDeApoio, true);
 
-        // Posiciona diante da câmera.
+        // Posiciona diante da camera.
         transform.position = pontoDeApoio.position;
 
-        // Ativa o efeito atmosférico.
+        // Ativa o efeito atmosferico.
         if (efeitoAtmosfericoGigante != null)
         {
             efeitoAtmosfericoGigante.SetActive(true);
@@ -103,7 +126,7 @@ public class Orb : MonoBehaviour
     }
 
 
-    // Chamado quando o jogador solta o orb.
+    // Chamado quando o jogador envia o orb para a nave.
     public bool EnviarParaNave(
         Transform pontoDeInsercao,
         Action<Orb> aoChegarAoDestino)
@@ -114,10 +137,13 @@ public class Orb : MonoBehaviour
             return false;
         }
 
+        // Interrompe imediatamente o som continuo.
+        PararSomSegurado();
+
         estado = EstadoOrb.EmTransito;
 
-        // Remove o orb da hierarquia da câmera,
-        // preservando sua transformação mundial.
+        // Remove o orb da hierarquia da camera,
+        // preservando sua transformacao mundial.
         transform.SetParent(null, true);
 
         pontoDeApoio = null;
@@ -126,16 +152,26 @@ public class Orb : MonoBehaviour
         aoChegar = aoChegarAoDestino;
 
         Debug.Log(
-            $"[Orb] {name}: iniciou transporte em direção a {destino.name}."
+            $"[Orb] {name}: iniciou transporte em direcao a {destino.name}."
         );
 
         return true;
     }
 
 
+    // Interrompe o som continuo do orb.
+    private void PararSomSegurado()
+    {
+        if (audioOrbSegurado != null && audioOrbSegurado.isPlaying)
+        {
+            audioOrbSegurado.Stop();
+        }
+    }
+
+
     private void LateUpdate()
     {
-        // Mantém o orb diante da câmera enquanto estiver segurado.
+        // Mantem o orb diante da camera enquanto estiver segurado.
         if (estado == EstadoOrb.Segurado &&
             pontoDeApoio != null)
         {
@@ -152,14 +188,14 @@ public class Orb : MonoBehaviour
         if (destino == null)
         {
             Debug.LogWarning(
-                $"{name}: o destino do orb não existe mais.",
+                $"{name}: o destino do orb nao existe mais.",
                 this
             );
 
             return;
         }
 
-        // Movimento suave em direção à nave.
+        // Movimento suave em direcao a nave.
         transform.position = Vector3.MoveTowards(
             transform.position,
             destino.position,
@@ -177,13 +213,13 @@ public class Orb : MonoBehaviour
 
             estado = EstadoOrb.Entregue;
 
-            // Interrompe as animações do orb.
+            // Interrompe as animacoes do orb.
             if (animacaoVisual != null)
             {
                 animacaoVisual.PararAnimacoes();
             }
 
-            // Desativa o efeito atmosférico gigante.
+            // Desativa o efeito atmosferico gigante.
             if (efeitoAtmosfericoGigante != null)
             {
                 efeitoAtmosfericoGigante.SetActive(false);

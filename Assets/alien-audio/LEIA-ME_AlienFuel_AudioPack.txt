@@ -1,0 +1,38 @@
+ALIEN FUEL — PACOTE INICIAL DE EFEITOS SONOROS
+
+Arquivos WAV originais, sintetizados proceduralmente para este projeto.
+Formato: PCM 16-bit, 48 kHz, mono.
+
+ARQUIVOS
+01_Orb_Pickup.wav
+  Som curto de captura do orb: pulso cristalino + pequeno brilho/plasma. Reproduzir uma vez ao pegar o orb.
+
+02_Orb_Held_Loop.wav
+  Zumbido energético contínuo e suave. É um loop de 4 segundos preparado para repetição sem corte perceptível. Iniciar ao segurar o orb e chamar Stop() ao soltá-lo/enviá-lo à nave.
+
+03_Ship_Startup_01_Weak.wav
+  Primeira tentativa de partida: fraca, mecânica e curta (1,5 s).
+
+04_Ship_Startup_02_Stronger.wav
+  Segunda tentativa: motor mais presente, engrenagens e aceleração (3 s).
+
+05_Ship_Startup_03_Ignition.wav
+  Terceira tentativa: ignição mais forte, grave e energética (2 s).
+
+06_Ship_Hover_Activation.wav
+  Efeito único de ativação/estabilização da flutuação (2,7 s).
+
+07_Ship_Hover_Ambience_Loop_OPTIONAL.wav
+  Ambiência contínua muito discreta para manter enquanto a nave flutua. Opcional; não é necessário para o MVP. Loop de 5 segundos.
+
+SUGESTÃO DE USO NO UNITY
+- Importe os WAVs diretamente para Assets/Audio/SFX.
+- Para os sons únicos, use AudioSource.PlayOneShot(clip).
+- Para Orb_Held_Loop: use um AudioSource separado, Loop ativado, Play() ao pegar e Stop() ao soltar/enviar. Não use PlayOneShot para esse loop, pois ele precisa ser interrompido.
+- Deixe o loop do orb em volume baixo/moderado; ele deve acompanhar a ação sem competir com a música.
+- Os sons da nave podem usar o AudioSource já referenciado por ShipRecoveryController.
+- O som de hover pode ser tocado uma vez após Decolar() terminar. O arquivo 07 é opcional e, se utilizado, precisa ser iniciado com Loop ativado e parado quando a cena for descarregada.
+- Recomenda-se testar volumes no jogo: os arquivos foram normalizados para evitar clipping, mas isso não determina o volume final percebido no mix.
+
+OBSERVAÇÃO
+Este é um primeiro pacote de direção sonora. Os sons foram desenhados para serem distintos e utilizáveis como placeholders refinados; a curadoria final deve ser feita ouvindo-os dentro da cena, junto à trilha musical e aos sons existentes.
