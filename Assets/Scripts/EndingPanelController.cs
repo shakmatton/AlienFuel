@@ -1,40 +1,40 @@
-using System.Collections;
 using UnityEngine;
 
 public class EndingPanelController : MonoBehaviour
 {
-    [Header("Painel Final")]
+    [Header("Painel de encerramento")]
     [SerializeField] private GameObject painelFinal;
 
-    [Header("Tempo de Espera")]
-    [SerializeField] private float tempoAteEncerramento = 10f;
+    private bool encerramentoExibido = false;
 
-    private bool encerramentoIniciado;
 
-    private void Start()
+    private void Awake()
     {
-        // Mantém o painel final escondido no início.
-        painelFinal.SetActive(false);
+        if (painelFinal == null)
+        {
+            Debug.LogError(
+                "EndingPanelController: configure o painel final.",
+                this
+            );
 
-        // Captura o mouse assim que a cena do jogo começa.
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+            return;
+        }
+
+        // Começa com o painel escondido.
+        painelFinal.SetActive(false);
     }
 
-    public void IniciarEncerramento()
+
+    // Exibe o painel sem modificar seus textos.
+    public void ExibirEncerramentoAgora()
     {
-        if (encerramentoIniciado)
+        if (encerramentoExibido || painelFinal == null)
             return;
 
-        encerramentoIniciado = true;
-        StartCoroutine(AguardarEncerramento());
-    }
+        encerramentoExibido = true;
 
-    private IEnumerator AguardarEncerramento()
-    {
-        yield return new WaitForSeconds(tempoAteEncerramento);
-
-        // Exibe o painel final.
         painelFinal.SetActive(true);
+
+        Debug.Log("Painel de encerramento exibido!");
     }
 }

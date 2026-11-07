@@ -34,7 +34,6 @@ public class ShipRecoveryController : MonoBehaviour
     [FormerlySerializedAs("somTerceiroOrb")]
     [SerializeField] private AudioClip somMotorTentativa3;
     
-    
 
     [Header("Audio - Ativacao da flutuacao")]
     [SerializeField] private AudioClip somAtivacaoFlutuacao;
@@ -42,7 +41,6 @@ public class ShipRecoveryController : MonoBehaviour
     [Header("Audio - Ambiencia da flutuacao")]
     [SerializeField] private AudioSource audioAmbienciaHover;
     [SerializeField] private AudioClip somAmbienciaFlutuacao;
-
 
     [Header("Vibracao - Primeiro orb")]
     [SerializeField] private float duracaoPrimeiraVibracao = 1.5f;
@@ -70,8 +68,11 @@ public class ShipRecoveryController : MonoBehaviour
     [SerializeField] private float alturaFlutuacao = 0.04f;
     [SerializeField] private float velocidadeFlutuacao = 1.3f;
 
-    [Header("Encerramento")]
-    [SerializeField] private EndingPanelController endingPanelController;
+    // [Header("Encerramento")]
+    // [SerializeField] private EndingPanelController endingPanelController;
+    
+    [Header("Sequencia final")]
+    [SerializeField] private FinalSequenceController finalSequenceController;
 
 
     private int etapasProcessadas = 0;
@@ -202,7 +203,19 @@ public class ShipRecoveryController : MonoBehaviour
                     );
 
                     // Inicia a contagem para o painel final.
-                    endingPanelController.IniciarEncerramento();
+                    // endingPanelController.IniciarEncerramento();
+                    
+                    // Inicia a nova sequencia do disco e do holograma.
+                    if (finalSequenceController != null)
+                    {
+                        finalSequenceController.IniciarSequenciaFinal();
+                    }
+                    else
+                    {
+                        Debug.LogError(
+                            "ShipRecoveryController: FinalSequenceController nao configurado!"
+                        );
+                    }
 
                     break;
             }
@@ -338,7 +351,14 @@ public class ShipRecoveryController : MonoBehaviour
             audioAmbienciaHover.Play();
         }
     }
+    
+    public void AjustarAlturaBaseHover(float incremento)
+    {
+        if (!naveEmHover)
+            return;
 
+        posicaoHover += Vector3.up * incremento;
+    }
 
     // Mantem uma pequena flutuacao apos a recuperacao completa.
     private void Update()
